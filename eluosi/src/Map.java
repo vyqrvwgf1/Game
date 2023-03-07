@@ -7,7 +7,10 @@ import java.awt.event.*;
 public class Map extends JPanel implements Runnable{
 	private  boolean  flag=false;
 	private  boolean  flagother=false;
-private  boolean  flagtwo=false;
+    private  boolean  flagtwo=false;
+    public PlayMusic BGM = new PlayMusic();
+    public PlayMusic lose = new PlayMusic();
+
 	//定义游戏中最多出现多少行和列
 	private static final int MAX_ROWS = 24;
 	private static final int MAX_COLS = 16;
@@ -30,14 +33,14 @@ private  boolean  flagtwo=false;
 	//显示下一个砖块的横坐标和纵坐标
 	private int msgX,msgY;
 	//当前砖块和预览砖块
-	private Brick brick,next_brick;
+	private Brick3 brick,next_brick;
 	private Random ran;
 	//构造方法，初始化游戏中的一些参数
 	public Map(){
 		brick_info = new int[MAX_ROWS][MAX_COLS];//游戏区域
 		resetBrick_info();        //清空二维数组中的砖块信息
-		brick = new Brick(0,0,0);   //产生当前砖块和下一个提示的砖块
-		next_brick = new Brick(0,0,0);		
+		brick = new Brick3(0,0,0);   //产生当前砖块和下一个提示的砖块
+		next_brick = new Brick3(0,0,0);		
 		msgX = BORDER+(MAX_COLS+1)*Brick.BRICK_WIDTH+BORDER;
 		msgY = BORDER*3;           //提示的下一个砖块的显示位置
 		ran = new Random();         
@@ -63,6 +66,7 @@ private  boolean  flagtwo=false;
 		score = 0;        //变量赋初值
 		(new Thread(this)).start();
 		repaint();
+		BGM.play_start("D:\\java_code\\eluosi\\src\\BGM.wav");
 	}
 	/**
 	  *此方法用来结束游戏
@@ -90,6 +94,9 @@ private  boolean  flagtwo=false;
 				
 			}			  			
 		}
+		BGM.play_end();
+		BGM.play_start("D:\\java_code\\eluosi\\src\\lose.wav");
+
 	}
 	/**
 	  *创建砖块函数，利用下一个砖块的信息重置当前砖块的信息，同时重新生成下一个砖块的信息
